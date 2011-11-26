@@ -13,12 +13,13 @@ I will update this plugin in [GitHub](https://github.com/bolasblack/csslint), bu
 
 need nodejs:
 
-    sudo pacman -S nodejs
-    sudo apt-get install nodejs
+    sudo pacman -S nodejs (archlinux)
+    sudo apt-get install nodejs (ubuntu, debian)
 
 need npm:
 
-    这里放 npm 的安装方式
+    yaourt nodejs-npm (archlinux)
+    curl http://npmjs.org/install.sh | sh (other)
 
 need csslint:
 
