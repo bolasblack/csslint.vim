@@ -9,7 +9,7 @@ History:
 2011.11.25 基本完工
 
 
-Credit [jslint.vim](https://github.com/hallettj/jslint.vim)
+Credit [jslint.vim](https://github.com/hallettj/jslint.vim) and [csslint](http://csslint.net/)
 
 I am not sure it could work well in Windows.
 
