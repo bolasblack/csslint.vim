@@ -9,7 +9,11 @@ History:
 2011.11.25 基本完工
 
 
-I will update this plugin in [GitHub](https://github.com/bolasblack/csslint), but not in vim.org
+Credit [jslint.vim](https://github.com/hallettj/jslint.vim)
+
+I am not sure it could work well in Windows.
+
+I will update this plugin in [GitHub](https://github.com/bolasblack/csslint), but not in vim.org.
 
 need nodejs:
 

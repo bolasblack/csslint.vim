@@ -3,8 +3,6 @@
 "  Email:           bolasblack [at] gmail
 "  FileName:        csslint.vim
 "  Description:     based on csslint of nodejs, check your own css code
-"                   code based on jslint.vim's code
-"                   thanks for the creater
 "  Version:         0.1
 "  LastChange:      2011-11-25
 "  History:         be created at 2011-11-25
