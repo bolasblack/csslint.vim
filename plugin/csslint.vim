@@ -24,7 +24,6 @@ autocmd BufEnter,BufWritePost <buffer> call s:CSSLint_Refresh()
 autocmd BufLeave <buffer> call s:CSSLint_Clear()
 autocmd CursorMoved <buffer> call s:CSSLint_GetMessage()
 
-let b:csslint_showingMessage = 0
 if !exists("g:CSSLint_HighlightErrorLine")
     let g:CSSLint_HighlightErrorLine = 1
 endif
@@ -120,6 +119,8 @@ EOF
     highlight link CSSLintError SpellBad
     let b:csslint_cleared = 0
 endfunction
+
+let b:csslint_showingMessage = 0
 
 function! s:CSSLint_GetMessage()
     let s:cursorPos = getpos(".")
