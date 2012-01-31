@@ -1,11 +1,14 @@
 "=============================================================================
-"  Author:          yicuan - http://plafer.tk/
+"  Author:          yicuan - http://plafer.info/
 "  Email:           bolasblack [at] gmail
 "  FileName:        csslint.vim
 "  Description:     based on csslint of nodejs, check your own css code
-"  Version:         0.1
-"  LastChange:      2011-11-25
-"  History:         be created at 2011-11-25
+"  Version:         0.2
+"  LastChange:      2012-2-1
+"  History:         at 2011-11-25 be created 
+"                   at 2012-2-1 add g:CSSLint_errors and g:CSSLint_warnings as
+"                   errors and warnings options of csslint, add 
+"                   g:CSSLint_HighlightLevel option
 "=============================================================================
 
 if !has('python')
@@ -24,13 +27,23 @@ autocmd BufEnter,BufWritePost <buffer> call s:CSSLint_Refresh()
 autocmd BufLeave <buffer> call s:CSSLint_Clear()
 autocmd CursorMoved <buffer> call s:CSSLint_GetMessage()
 
+let g:CSSLint_Ver = "0.2"
+
 if !exists("g:CSSLint_HighlightErrorLine")
     let g:CSSLint_HighlightErrorLine = 1
 endif
 if !exists("g:CSSLint_FileTypeList")
-    let g:CSSLint_FileTypeList = ['css', 'less']
+    let g:CSSLint_FileTypeList = ['css']
 endif
-" TODO: csslint 的检测有不少参数，应该可以设置
+if !exists("g:CSSLint_errors")
+    let g:CSSLint_errors = ['']
+endif
+if !exists("g:CSSLint_warnings")
+    let g:CSSLint_warnings = ['']
+endif
+if !exists("g:CSSLint_highlightLevel") || index(['error', 'warning'], g:CSSLint_HighlightLevel) == -1
+    let g:CSSLint_HighlightLevel = ['warning', 'error']
+endif
 
 function! s:CSSLint()
     if index(g:CSSLint_FileTypeList, &filetype) == -1
@@ -39,10 +52,8 @@ function! s:CSSLint()
 
     highlight link CSSLintError SpellBad
 
-    if exists("b:csslint_cleared")
-        if b:csslint_cleared == 0
-            call s:CSSLint_Clear()
-        endif
+    if exists("b:csslint_cleared") && b:csslint_cleared == 0
+        call s:CSSLint_Clear()
     endif
 
     let b:csslint_matched = []
@@ -58,8 +69,13 @@ function! s:CSSLint()
     endif
 
     if executable('csslint')
-        let current_file = expand('%:p')
-        let s:cmd = 'csslint --format=checkstyle-xml ' . iconv( current_file , &enc, "utf8")
+        let current_file = iconv(expand('%:p'), &encoding, 'utf8')
+        let errors_str = iconv(join(g:CSSLint_errors, ','), &encoding, 'utf8')
+        let warnings_str = iconv(join(g:CSSLint_warnings, ','), &encoding, 'utf8')
+        let s:cmd = 'csslint --format=checkstyle-xml --errors=' . errors_str . ' --warnings=' . warnings_str . ' ' . current_file
+        let g:CSSLint_warnings_str = warnings_str
+        let g:CSSLint_errors_str = errors_str
+        let g:CSSLint_cmd = s:cmd
         let l:csslint_output = system(s:cmd)
         call s:CSSLint_ListEncode(l:csslint_output)
     else
@@ -98,23 +114,26 @@ import xml.dom.minidom as minidom
 
 lintXmlString = vim.eval('a:lintXmlString').replace('&', '&amp;')
 errors = minidom.parseString(lintXmlString)
+highlightLevel = vim.eval('g:CSSLint_HighlightLevel')
 for error in errors.getElementsByTagName('error'):
     line = error.getAttribute('line')
     column = error.getAttribute('column')
     level = error.getAttribute('severity')
-    message = error.getAttribute('message')
-    message = message[:message.find(' at line')]
-    message = message + ' at col ' + column
-    vim.command('let s:csslint_matchDict = { \
-        "line": "' + line + '",              \
-        "column": "' + column + '",          \
-        "level": "' + level + '",            \
-        "message": "' + message + '"         \
-    }')
-    vim.command('let b:csslint_matchedLines[' + line + '] = s:csslint_matchDict')
-    vim.command('call add(b:csslint_matched, s:csslint_matchDict)')
-    if vim.eval('g:CSSLint_HighlightErrorLine') == '1':
-        vim.command('call matchadd("CSSLintError", "\\\%" . ' + line + r' . "l\\S.*\\(\\S\\|$\\)")')
+
+    if level in highlightLevel:
+        message = error.getAttribute('message')
+        message = message[:message.find(' at line')]
+        message = message + ' at col ' + column
+        vim.command('let s:csslint_matchDict = { \
+            "line": "' + line + '",              \
+            "column": "' + column + '",          \
+            "level": "' + level + '",            \
+            "message": "' + message + '"         \
+        }')
+        vim.command('let b:csslint_matchedLines[' + line + '] = s:csslint_matchDict')
+        vim.command('call add(b:csslint_matched, s:csslint_matchDict)')
+        if vim.eval('g:CSSLint_HighlightErrorLine') == '1':
+            vim.command('call matchadd("CSSLintError", "\\\%" . ' + line + r' . "l\\S.*\\(\\S\\|$\\)")')
 EOF
     highlight link CSSLintError SpellBad
     let b:csslint_cleared = 0
