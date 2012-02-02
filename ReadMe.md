@@ -4,6 +4,8 @@ Version: 0.2
 
 Desc: Vim plugin for csslint
 
+Depand: Python > 2.6
+
 Install: Copy file into $VIM/plugin/, need Python 
 
 History: 
