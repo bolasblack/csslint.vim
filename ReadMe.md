@@ -6,9 +6,9 @@ Desc: Vim plugin for csslint
 
 Depand: Python > 2.6
 
-Install: Copy file into $VIM/plugin/, need Python 
+Install: Copy file into $VIM/plugin/, need Python
 
-History: 
+History:
 
 2011.11.25 基本完工
 2012.2.1 增加了 g:CSSLint_errors 和 g:CSSLint_warnings 来达到 csslint 的 errors 和 warnings 选项的效果，顺便增加了高亮的错误的等级过滤
@@ -49,4 +49,4 @@ can add rules as options of csslint (csslint --warnings=...):
 
 can filter message:
 
-    let g:CSSLint_highlightLevel = ['error']
+    let g:CSSLint_HighlightLevel = ['error']

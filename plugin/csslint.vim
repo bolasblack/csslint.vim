@@ -5,9 +5,9 @@
 "  Description:     based on csslint of nodejs, check your own css code
 "  Version:         0.2
 "  LastChange:      2012-2-1
-"  History:         at 2011-11-25 be created 
+"  History:         at 2011-11-25 be created
 "                   at 2012-2-1 add g:CSSLint_errors and g:CSSLint_warnings as
-"                   errors and warnings options of csslint, add 
+"                   errors and warnings options of csslint, add
 "                   g:CSSLint_HighlightLevel option
 "=============================================================================
 
@@ -41,7 +41,7 @@ endif
 if !exists("g:CSSLint_warnings")
     let g:CSSLint_warnings = ['']
 endif
-if !exists("g:CSSLint_highlightLevel") || index(['error', 'warning'], g:CSSLint_HighlightLevel) == -1
+if !exists("g:CSSLint_HighlightLevel") || index(['error', 'warning'], g:CSSLint_HighlightLevel) == -1
     let g:CSSLint_HighlightLevel = ['warning', 'error']
 endif
 
@@ -63,7 +63,7 @@ function! s:CSSLint()
     if a:firstline == a:lastline
         let b:firstline = 1
         let b:lastline = '$'
-    else 
+    else
         let b:firstline = a:firstline
         let b:lastline = a:lastline
     endif
@@ -109,7 +109,7 @@ endfun
 
 function! s:CSSLint_ListEncode(lintXmlString)
 python << EOF
-import vim 
+import vim
 import xml.dom.minidom as minidom
 
 lintXmlString = vim.eval('a:lintXmlString').replace('&', '&amp;')
