@@ -49,4 +49,4 @@ can add rules as options of csslint (csslint --warnings=...):
 
 can filter message:
 
-    let g:CSSLint_highlightLevel = ['error']
+    let g:CSSLint_HighlightLevel = ['error']
